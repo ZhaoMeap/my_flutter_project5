@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,7 +50,7 @@ class MyHomePage extends StatelessWidget {
     );
 
     final widget = Center(
-      child: Column(
+      child: Stack(
         children: <Widget>[
           Container(
             child: imgBrowser,
@@ -62,7 +64,6 @@ class MyHomePage extends StatelessWidget {
             margin: EdgeInsets.symmetric(vertical: 10),
           ),
         ],
-        mainAxisAlignment: MainAxisAlignment.center,
       ),
     );
 
@@ -95,7 +96,24 @@ class _ImageBrowser extends StatefulWidget {
 class _ImageBrowserState extends State<_ImageBrowser> {
   @override
   Widget build(BuildContext context) {
-    Image img = Image.asset(widget._images[widget._imageIndex]);
+    var img = PhotoViewGallery(
+      pageOptions: <PhotoViewGalleryPageOptions>[
+        PhotoViewGalleryPageOptions(
+          imageProvider: AssetImage(widget._images[widget._imageIndex]),
+          minScale: PhotoViewComputedScale.contained * 0.3,
+          maxScale: PhotoViewComputedScale.covered * 1.3,
+        ),
+      ],
+      loadingBuilder: (context, progress) => Center(
+        child: Container(
+          width: 20.0,
+          height: 20.0,
+        ),
+      ),
+      backgroundDecoration: BoxDecoration(
+        color: Colors.teal[300],
+      ),
+    );
     return img;
   }
 
